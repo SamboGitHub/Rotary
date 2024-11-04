@@ -23,8 +23,8 @@
 
 RotaryEncoder knob1;
 
-bool not_ignoring_clk = true;
-unsigned long bounce_delay = 10;
+bool ignoring_clk = false;
+unsigned long bounce_delay = 75;
 unsigned long debounce_delay_start = 0;
 
 enum rotary_encoder_state
@@ -56,7 +56,7 @@ void RotateStateChanged() // When CLK  FALLING READ DAT
     // rotary_encoder_pos = 0;
     // printf("in RotateStateChanged\n");
     //  printf("I \n");
-    if (not_ignoring_clk)
+    if (!ignoring_clk)
     {
 
         if (gpio_get(DAT)) // When DAT = HIGH IS FORWARD
@@ -73,7 +73,7 @@ void RotateStateChanged() // When CLK  FALLING READ DAT
             printf("D \n");
             // sleep_ms(20);
         }
-        not_ignoring_clk = true;
+        ignoring_clk = true;
         debounce_delay_start = msSinceBoot();
     }
 }
@@ -143,9 +143,9 @@ int main()
             printf("%d \n", rotary_encoder_pos);
         }
 
-        if (not_ignoring_clk and (msSinceBoot() > debounce_delay_start + bounce_delay))
+        if (ignoring_clk and (msSinceBoot() > debounce_delay_start + bounce_delay))
         {
-            not_ignoring_clk = false;
+            ignoring_clk = false;
         }
     }
     // knob1.run();
