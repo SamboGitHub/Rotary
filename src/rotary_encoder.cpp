@@ -21,6 +21,8 @@ long int position;
 unsigned long bounce_delay = 75;
 unsigned long debounce_delay_start = 0;
 
+void (*button_pointer)(void);
+
 void RotaryEncoder::init()
 {
   gpio_set_dir(CLK, GPIO_IN);
@@ -49,7 +51,9 @@ void RotaryEncoder::run()
   // display position if button pushed
   if (gpio_get(BUTTON) != true)
   {
-    printf("%d \n", position);
+  // run the code at the location pointed to by the pointer
+  (*button_pointer)();
+    // printf("%d \n", position);
   }
 }
 

@@ -6,8 +6,9 @@ class RotaryEncoder
 public:
     // RotaryEncoder();
     void run();
-    void RotateStateChanged();
+    void RotateStateChanged(); // interrupt code that runs when rotary changes
     void init();
+    void (*button_pointer)(void); // pointer to code to call when button is pushed
     unsigned int CLK;
     unsigned int DAT;
     unsigned int BUTTON;
