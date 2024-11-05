@@ -57,15 +57,15 @@ void RotaryEncoder::RotateStateChanged() // When CLK  FALLING READ DAT
 {
   if (!ignoring_clk)
   {
-    if (gpio_get(DAT)) // When DAT = HIGH IS FORWARD
+    if (gpio_get(DAT)) // When DAT = HIGH IS FORWARD rotate
     {
       position++;
-      printf("U \n");
+      // printf("U \n");
     }
-    else // When DAT = LOW IS BackRote
+    else // When DAT = LOW IS Backwards Rotate
     {
       position--;
-      printf("D \n");
+      // printf("D \n");
     }
     ignoring_clk = true;
     debounce_delay_start = msSinceBoot();
