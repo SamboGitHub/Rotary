@@ -35,7 +35,7 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(Rotary Rotary.cpp)
+add_executable(Rotary Rotary.cpp src/rotary_encoder.cpp src/global.cpp)
 
 pico_set_program_name(Rotary "Rotary")
 pico_set_program_version(Rotary "0.1")

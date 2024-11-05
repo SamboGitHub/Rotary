@@ -1,8 +1,3 @@
-// // #include <Arduino.h>
-// #include <sam.h>
-// #include <libprintf.h>
-// #include <SPI.h>
-
 #include <stdio.h>
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
@@ -21,13 +16,51 @@
 
 // RotaryEncoder::RotaryEncoder(){}
 
+bool ignoring_clk;
+long int position;
+unsigned long bounce_delay = 75;
+unsigned long debounce_delay_start = 0;
+
+void RotaryEncoder::init()
+{
+  gpio_set_dir(CLK, GPIO_IN);
+  gpio_set_dir(DAT, GPIO_IN);
+  gpio_set_dir(BUTTON, GPIO_IN);
+
+  // gpio_set_irq_enabled(CLK,);
+  gpio_set_pulls(CLK, true, false);
+  gpio_set_pulls(DAT, true, false);
+  // gpio_set_pulls(BUTTON,true,false);
+
+  position = 0;
+  ignoring_clk = false;
+  bounce_delay = 75;
+  debounce_delay_start = 0;
+}
+
 void RotaryEncoder::run()
 {
-  if  (gpio_get(BUTTON) != true)
+  if (gpio_get(BUTTON) != true)
+  {
+    printf("%d \n", position);
+  }
+}
+
+void RotaryEncoder::RotateStateChanged() // When CLK  FALLING READ DAT
+{
+  if (!ignoring_clk)
+  {
+    if (gpio_get(DAT)) // When DAT = HIGH IS FORWARD
     {
-
-    //  printf("%lu Button\n", millis());
-    printf("%d \n", rotary_encoder_pos);
-
-   }
+      position++;
+      printf("U \n");
+    }
+    else // When DAT = LOW IS BackRote
+    {
+      position--;
+      printf("D \n");
+    }
+    ignoring_clk = true;
+    debounce_delay_start = msSinceBoot();
+  }
 }
