@@ -40,6 +40,13 @@ void RotaryEncoder::init()
 
 void RotaryEncoder::run()
 {
+  // wait for knob debounce and listen to CLK if debounce complete
+  if (ignoring_clk and (msSinceBoot() > debounce_delay_start + bounce_delay))
+  {
+    ignoring_clk = false;
+  }
+
+  // display position if button pushed
   if (gpio_get(BUTTON) != true)
   {
     printf("%d \n", position);

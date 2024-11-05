@@ -35,7 +35,7 @@ int main()
     knob1.DAT = 3;
     knob1.BUTTON = 2;
     knob1.init();
-    // set up callback for knob1
+    // set up callback for knob1 when CLK falls
     gpio_set_irq_enabled_with_callback(knob1.CLK, GPIO_IRQ_EDGE_FALL, true, &knob1_callback);
     // end set up knob 1
 
@@ -45,11 +45,5 @@ int main()
     while (true)
     {
         knob1.run();
-
-        // wait for knob1 debounce and listen to CLK if debounce complete
-        if (knob1.ignoring_clk and (msSinceBoot() > knob1.debounce_delay_start + knob1.bounce_delay))
-        {
-            knob1.ignoring_clk = false;
-        }
     }
 }
